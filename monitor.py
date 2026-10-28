@@ -1,0 +1,35 @@
+name: monitor
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: monitor
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Tekshiruv
+        run: python3 monitor.py
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          CHAT_ID: ${{ secrets.CHAT_ID }}
+          SITE_URLS: ${{ secrets.SITE_URLS }}
+
+      - name: Holatni saqlash
+        if: always()
+        run: |
+          git config user.name "monitor"
+          git config user.email "monitor@users.noreply.github.com"
+          git add state.json || true
+          git diff --cached --quiet || (git commit -m "holat" && git push)
