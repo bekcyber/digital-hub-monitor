@@ -1,0 +1,11 @@
+{
+  "checks": {
+    "bot": {
+      "s": "ok"
+    },
+    "site:https://cozy-gelato-2487b2.netlify.app/": {
+      "s": "ok"
+    }
+  },
+  "started": true
+}
